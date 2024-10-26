@@ -1,8 +1,11 @@
-import React from 'react'; 
+import React, { useState } from 'react'; 
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'; // Import icons for edit and delete
 import '../styles/task.css';
 
+import Modal from "./Modal";
+
 const Tasks = () => {
+    const [isModalOpen, setModalOpen] = useState(false);
   const tasks = [
     { id: 1, title: 'Task 1' },
     { id: 2, title: 'Task 2' },
@@ -16,12 +19,21 @@ const Tasks = () => {
     { id: 10, title: 'Task 10' },
   ];
 
+  
+  const handleCreateClick = () => {
+    setModalOpen(true); 
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false); 
+  };
+
   return (
     <>
       <div className="tasks-container">
         <div className="tasks-header d-flex justify-content-between align-items-center">
           <h3>Tasks Today</h3>
-          <button className="create-button">Create</button>
+          <button className="create-button" onClick={handleCreateClick}>Create</button>
         </div>
 
         <div className="tasks-list">
@@ -40,6 +52,8 @@ const Tasks = () => {
           ))}
         </div>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
     </>
   );
 };

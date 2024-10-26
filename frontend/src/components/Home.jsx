@@ -5,9 +5,11 @@ import { FaSearch } from 'react-icons/fa';
 import Reminder from "./Reminder";
 import Tasks from "./Tasks";
 
+
 import '../styles/home.css';
 
 const Home = () => {
+
 
   const getCurrentWeek = () => {
     const currentDate = new Date();
@@ -28,6 +30,8 @@ const Home = () => {
   };
 
   const weekDays = getCurrentWeek();
+
+
   return (
     <>
       <div className="task-section">
@@ -67,6 +71,7 @@ const Home = () => {
 
        <Reminder/>
        <Tasks/>
+      
       </div>
     </>
   );
