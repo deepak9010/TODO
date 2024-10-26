@@ -13,10 +13,10 @@ const Navbar = ({menuOpen, setMenuOpen}) => {
            <NavContent setMenuOpen={setMenuOpen}/>
         </nav>
 
-         <button className="navBtn" onClick={() => setMenuOpen( !menuOpen)}>
+         {/* <button className="navBtn" onClick={() => setMenuOpen( !menuOpen)}>
             <AiOutlineMenu />
          </button>
-      
+       */}
      </>
  
   );

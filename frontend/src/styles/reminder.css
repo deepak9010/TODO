@@ -1,0 +1,75 @@
+.task-status {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 5px;
+    gap: 30px;
+}
+
+.task-complete {
+    display: flex;
+    flex-direction: column;
+    background-color: #EFF2FF;
+    ; 
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.task-complete-info {
+    display: flex;
+    align-items: center;
+}
+
+.task-complete .status-icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #7382c6; 
+}
+
+.task-number-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.task-text {
+    font-weight: bold;
+}
+
+.task-number {
+    margin-right: 5px;
+    font-weight: 600;
+    font-size: 26px;
+}
+
+.task-week {
+    font-size: 0.7rem;
+}
+
+.task-incomplete {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 230, 231, 1);
+    ; 
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.task-incomplete .status-icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #d85663;
+}
+.progress {
+    height: 20px; 
+    border-radius: 3px;
+    background-color: #DADAFF;
+    ;
+  }
+  
+  .progress-bar {
+    background-color: #253C98;
+    transition: width 0.6s ease; 
+    border-radius: 0px;
+  }
