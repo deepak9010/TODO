@@ -4,7 +4,7 @@ import '../styles/task.css';
 
 import Modal from "./Modal";
 
-const Tasks = () => {
+const Tasks = ({ onUpdateCounts }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [tasks, setTasks] = useState([]); 
   
@@ -44,11 +44,20 @@ const Tasks = () => {
               });
               
               if (response.ok) {
-                  setTasks((prevTasks) => 
-                      prevTasks.map((task) =>
-                          task._id === taskId ? { ...task, status: newStatus } : task
-                      )
+                setTasks((prevTasks) => {
+                  const updatedTasks = prevTasks.map((task) =>
+                    task._id === taskId ? { ...task, status: newStatus } : task
                   );
+        
+                  // Update counts based on the updated tasks
+                  const completedCount = updatedTasks.filter(task => task.status === 'completed').length;
+                  const pendingCount = updatedTasks.length - completedCount;
+        
+                  // Call the function passed from Home to update counts
+                  onUpdateCounts(completedCount, pendingCount);
+        
+                  return updatedTasks;
+                });
               } else {
                   console.error('Error updating task status');
               }

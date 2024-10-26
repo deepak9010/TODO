@@ -4,40 +4,11 @@ import '../styles/reminder.css';
 
 console.log('API URL:', `${process.env.REACT_APP_API_URL}/pending-count`);
 
-const Reminder = () => {
-  const [completedTasks, setCompletedTasks] = useState(0);
-  const [pendingTasks, setPendingTasks] = useState(0);
+const Reminder = ({ completedTasks, pendingTasks }) => {
+
   const totalTasks = completedTasks + pendingTasks; 
   const progress = totalTasks ? (completedTasks / totalTasks) * 100 : 0;
 
-  useEffect(() => {
-    // Fetch completed tasks count
-    const fetchCompletedTasks = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/completed-count`);
-        const data = await response.json();
-        setCompletedTasks(data.completed_count); 
-        // console.log('Completed Tasks:', data.completed_count);
-      } catch (error) {
-        console.error('Error fetching completed tasks:', error);
-      }
-    };
-
-    // Fetch pending tasks count
-    const fetchPendingTasks = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/pending-count`);
-        const data = await response.json();
-        setPendingTasks(data.pending_count);
-        // console.log('Pending Tasks:', data.pending_count);  
-      } catch (error) {
-        console.error('Error fetching pending tasks:', error);
-      }
-    };
-
-    fetchCompletedTasks();
-    fetchPendingTasks();
-  }, []);
 
 
   return (

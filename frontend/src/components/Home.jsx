@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa'; 
 
@@ -9,6 +9,8 @@ import Tasks from "./Tasks";
 import '../styles/home.css';
 
 const Home = () => {
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [pendingTasks, setPendingTasks] = useState(0);
 
 
   const getCurrentWeek = () => {
@@ -31,6 +33,31 @@ const Home = () => {
 
   const weekDays = getCurrentWeek();
 
+
+   // Function to fetch initial task counts
+   const fetchTaskCounts = async () => {
+    try {
+      const completedResponse = await fetch(`${process.env.REACT_APP_API_URL}/completed-count`);
+      const completedData = await completedResponse.json();
+      setCompletedTasks(completedData.completed_count);
+
+      const pendingResponse = await fetch(`${process.env.REACT_APP_API_URL}/pending-count`);
+      const pendingData = await pendingResponse.json();
+      setPendingTasks(pendingData.pending_count);
+    } catch (error) {
+      console.error('Error fetching task counts:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTaskCounts(); // Fetch the counts on first render
+  }, []);
+
+  
+  const handleUpdateTaskCounts = (completedCount, pendingCount) => {
+    setCompletedTasks(completedCount);
+    setPendingTasks(pendingCount);
+  };
 
   return (
     <>
@@ -69,8 +96,8 @@ const Home = () => {
             </ul>
           </div>
 
-       <Reminder/>
-       <Tasks/>
+       <Reminder completedTasks={completedTasks} pendingTasks={pendingTasks}/>
+       <Tasks onUpdateCounts={handleUpdateTaskCounts}/>
       
       </div>
     </>
