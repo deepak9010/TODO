@@ -2,6 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import {AiOutlineMenu} from "react-icons/ai" 
 
+import '../styles/navbar.css';
+
+
 const Navbar = ({menuOpen, setMenuOpen}) => {
   return (
    
@@ -22,17 +25,10 @@ const Navbar = ({menuOpen, setMenuOpen}) => {
 
 const NavContent = ({setMenuOpen})=>(
   <>
-     <h2> CRUD</h2>
+     <h2> TODO</h2>
      <div>
-      <Link to="/create"  onClick={() => setMenuOpen(false)}>Create Post</Link>
-      <Link to="/2"  onClick={() => setMenuOpen(false)}>Create 2</Link>
-      {/* <Link to="/all"  onClick={() => setMenuOpen(false)}>All Post</Link> */}
-      <Link to="/all"  onClick={() => setMenuOpen(false)}>All Post</Link>
-      <Link to="/table"  onClick={() => setMenuOpen(false)}>Table</Link>
-  
-     </div>
-
-     
+      <Link to="/create"  onClick={() => setMenuOpen(false)}>Create Task</Link>
+     </div> 
   </>
 )
 
