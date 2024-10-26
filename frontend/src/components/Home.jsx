@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from "react";
 import { Link } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa'; 
+import { FaSearch, FaArrowLeft, FaArrowRight } from 'react-icons/fa'; 
 
 import Reminder from "./Reminder";
 import Tasks from "./Tasks";
@@ -11,14 +11,14 @@ import '../styles/home.css';
 const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
+  const [currentWeek, setCurrentWeek] = useState(new Date());
+  
 
-
-  const getCurrentWeek = () => {
-    const currentDate = new Date();
-    const currentDay = currentDate.getDay(); // Get current day (0-6)
-    const mondayOffset = (currentDay === 0 ? -6 : 1) - currentDay; // Calculate offset to get Monday
-    const startOfWeek = new Date(currentDate);
-    startOfWeek.setDate(currentDate.getDate() + mondayOffset);
+  const getCurrentWeek = (date) => {
+    const currentDay = date.getDay(); 
+    const mondayOffset = (currentDay === 0 ? -6 : 1) - currentDay; 
+    const startOfWeek = new Date(date);
+    startOfWeek.setDate(date.getDate() + mondayOffset);
 
     // Create an array of the week
     const weekDays = [];
@@ -31,7 +31,21 @@ const Home = () => {
     return weekDays;
   };
 
-  const weekDays = getCurrentWeek();
+  const weekDays = getCurrentWeek(currentWeek);
+
+    // Function to navigate to the previous week
+    const handlePreviousWeek = () => {
+      const previousWeek = new Date(currentWeek);
+      previousWeek.setDate(previousWeek.getDate() - 7);
+      setCurrentWeek(previousWeek);
+    };
+  
+    // Function to navigate to the next week
+    const handleNextWeek = () => {
+      const nextWeek = new Date(currentWeek);
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      setCurrentWeek(nextWeek);
+    };
 
 
    // Function to fetch initial task counts
@@ -50,7 +64,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchTaskCounts(); // Fetch the counts on first render
+    fetchTaskCounts(); 
   }, []);
 
   
@@ -85,16 +99,25 @@ const Home = () => {
           </div>
         </div>
 
+       
         <div className="current-week mt-4">
-            <ul>
+          <div className="week-navigation d-flex justify-content-between align-items-center">
+            <button onClick={handlePreviousWeek} className="arrow-button">
+              <FaArrowLeft />
+            </button>
+            <ul className="d-flex list-unstyled">
               {weekDays.map((date, index) => (
-                <li key={index}>
-                      <div className="day">{date.toLocaleDateString("en-US", { weekday: "short" })}</div>
-                      <div className="date">{date.getDate()}</div>
+                <li key={index} className="text-center mx-2">
+                  <div className="day">{date.toLocaleDateString("en-US", { weekday: "short" })}</div>
+                  <div className="date">{date.getDate()}</div>
                 </li>
               ))}
             </ul>
+            <button onClick={handleNextWeek} className="arrow-button">
+              <FaArrowRight />
+            </button>
           </div>
+        </div>
 
        <Reminder completedTasks={completedTasks} pendingTasks={pendingTasks}/>
        <Tasks onUpdateCounts={handleUpdateTaskCounts}/>
