@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa'; 
 
 import Reminder from "./Reminder";
+import Tasks from "./Tasks";
 
 import '../styles/home.css';
 
@@ -65,7 +66,7 @@ const Home = () => {
           </div>
 
        <Reminder/>
-       
+       <Tasks/>
       </div>
     </>
   );

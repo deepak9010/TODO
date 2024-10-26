@@ -61,6 +61,10 @@
     margin-right: 10px;
     color: #d85663;
 }
+
+.allProgrss> h5{
+    text-align:left;
+}
 .progress {
     height: 20px; 
     border-radius: 3px;

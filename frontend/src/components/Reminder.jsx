@@ -33,7 +33,8 @@ const Reminder = () => {
       </div>
 
 
-      <div className="mt-4">
+      <div className="mt-4 allProgrss">
+      <h5>Weekly Progress</h5>
         <div className="progress">
           <div
             className="progress-bar"
