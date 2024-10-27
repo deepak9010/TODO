@@ -106,6 +106,29 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
       };
 
   
+
+   const handleDeleteClick = async (taskId) => {
+        if (window.confirm("Are you sure you want to delete this task?")) {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/task/${taskId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    setTasks((prevTasks) => prevTasks.filter(task => task._id !== taskId));
+                    fetchTaskCounts(weekStart, weekEnd);
+                    console.log('Task deleted successfully');
+                } else {
+                    console.error('Error deleting task:', await response.json());
+                }
+            } catch (error) {
+                console.error('Error deleting task:', error);
+            }
+        }
+    };
+
+
+  
   const handleCreateClick = () => {
     setModalOpen(true); 
   };
@@ -154,7 +177,10 @@ const handleCloseReadModal = () => {
                                     <FaEdit className="icon edit-icon" title="Edit Details" 
                                     onClick={() => handleReadClick(task._id)}
                                      />
-                                    <FaTrash className="icon delete-icon" title="Delete" />
+                                    <FaTrash className="icon delete-icon" title="Delete" 
+                                        onClick={() => handleDeleteClick(task._id)} 
+                                    />
+
                                 </div>
                             </div>
                         ))
