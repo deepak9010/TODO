@@ -21,8 +21,6 @@ app.use(express.json());
 const pingRoute= require("./routes/pingRoute");
 const taskRoute= require("./routes/tasksRoute");
 
-app.use(pingRoute);
-app.use(taskRoute);
 
 
 // connect to mongodb database
@@ -37,6 +35,11 @@ mongoose.connect(process.env.URI)
   .catch((error) => {
     console.log("Failed to connect", error)
   });
+
+  
+app.use(pingRoute);
+app.use(taskRoute);
+
 
 
 
