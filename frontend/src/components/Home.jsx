@@ -15,12 +15,14 @@ const Home = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   
   const today = new Date();
-
+ console.log("todayyyyy", today)
+   
   const getCurrentWeek = (date) => {
     const currentDay = date.getDay(); 
     const mondayOffset = (currentDay === 0 ? -6 : 1) - currentDay; 
     const startOfWeek = new Date(date);
     startOfWeek.setDate(date.getDate() + mondayOffset);
+    startOfWeek.setHours(0, 0, 0, 0);
 
     // Create an array of the week
     const weekDays = [];
@@ -30,10 +32,17 @@ const Home = () => {
       weekDays.push(date);
     }
 
-    return weekDays;
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999); 
+
+    return { weekDays, startOfWeek, endOfWeek };
   };
 
-  const weekDays = getCurrentWeek(currentWeek);
+   // Get weekDays, startOfWeek, and endOfWeek
+   const { weekDays, startOfWeek, endOfWeek } = getCurrentWeek(currentWeek);
+
+
 
     // Function to navigate to the previous week
     const handlePreviousWeek = () => {
@@ -56,8 +65,8 @@ const Home = () => {
       const startTimestamp = Math.floor(startOfWeek.getTime() / 1000);
       const endTimestamp = Math.floor(endOfWeek.getTime() / 1000);
 
-      // console.log("Start of the week (timestamp):", startTimestamp);
-      // console.log("End of the week (timestamp):", endTimestamp);
+      console.log("Start of the week (timestamp):", startTimestamp);
+      console.log("End of the week (timestamp):", endTimestamp);
 
       const completedResponse = await fetch(
         `${process.env.REACT_APP_API_URL}/completed-count?start=${startTimestamp}&end=${endTimestamp}`
@@ -76,21 +85,29 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const weekDays = getCurrentWeek(currentWeek);
-    const startOfWeek = weekDays[0];
-    const endOfWeek = weekDays[6];
+    const { startOfWeek, endOfWeek } = getCurrentWeek(currentWeek);
     fetchTaskCounts(startOfWeek, endOfWeek);
-  }, [currentWeek]);
+}, [currentWeek]);
 
   
-  const handleUpdateTaskCounts = (completedCount, pendingCount) => {
-    setCompletedTasks(completedCount);
-    setPendingTasks(pendingCount);
-  };
+  // const handleUpdateTaskCounts = (completedCount, pendingCount) => {
+  //   setCompletedTasks(completedCount);
+  //   setPendingTasks(pendingCount);
+  // };
 
   const handleDateClick = (date) => {
-    setSelectedDate(date); 
+         // Log the clicked date as a Date object
+    console.log("Clicked Date Object:", date);
+
+    // Set the selected date as the date object (not a string)
+    setSelectedDate(date);
+
+    // Log the values for verification
+    console.log("Original Date:", date.toString());
+  
   };
+
+
 
   return (
     <>
@@ -145,7 +162,13 @@ const Home = () => {
         </div>
 
        <Reminder completedTasks={completedTasks} pendingTasks={pendingTasks}/>
-       <Tasks onUpdateCounts={handleUpdateTaskCounts} selectedDate={selectedDate}/>
+       <Tasks
+        // onUpdateCounts={handleUpdateTaskCounts} 
+       selectedDate={selectedDate}
+       fetchTaskCounts={fetchTaskCounts}
+       weekStart={startOfWeek}
+       weekEnd={endOfWeek}
+       />
       
       </div>
     </>

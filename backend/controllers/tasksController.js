@@ -174,16 +174,17 @@ const getPendingCount = async (req, res) => {
 const getTasksByDate = async (req, res) => {
     try {
         const { date } = req.params; 
-        // console.log("Received date parameter (epoch):", date);
+        console.log("Received date parameter (epoch):", date);
 
 
       const targetDate = new Date(date * 1000);
+      console.log("targetDate targetDate day:", targetDate);
       const startOfDay = new Date(targetDate.setUTCHours(0, 0, 0, 0)); 
       const endOfDay = new Date(targetDate.setUTCHours(23, 59, 59, 999)); 
   
      
-    //   console.log("Start of day:", startOfDay);
-    //   console.log("End of day:", endOfDay);
+      console.log("Start of day:", startOfDay);
+      console.log("End of day:", endOfDay);
       
       const tasks = await tasksdata.find({
         date: { 

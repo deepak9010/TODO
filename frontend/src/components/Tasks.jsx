@@ -4,44 +4,58 @@ import '../styles/task.css';
 
 import Modal from "./Modal";
 
-const Tasks = ({ onUpdateCounts, selectedDate }) => {
+const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd  }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [tasks, setTasks] = useState([]); 
   
-    //   // Fetch tasks from the API
-    //   useEffect(() => {
-    //     const fetchTasks = async () => {
-    //         try {
-    //             const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
-    //             const data = await response.json();
-                
-    //             if (response.ok) {
-    //                 // console.log('Tasks:', data.data);
-    //                 setTasks(data.data); 
-    //             } else {
-    //                 console.error('Error fetching tasks:', data.message);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching tasks:', error);
-    //         }
-    //     };
+  
+  //   useEffect(() => {
+  //     const fetchTasks = async () => {
+  //         if (!selectedDate) return; 
+  //         const timestamp = Math.floor(selectedDate.getTime() / 1000);
 
-    //     fetchTasks();
-    // }, []);
+  //          // Log the timestamp
+  //         //  console.log("Fetching tasks for timestamp:", timestamp);
+
+
+  //         try {
+  //             const response = await fetch(`${process.env.REACT_APP_API_URL}/date/${timestamp}`);
+  //             const data = await response.json();
+              
+  //             if (response.ok) {
+  //                 setTasks(data.data); 
+  //             } else {
+  //                 console.error('Error fetching tasks:', data.message);
+  //             }
+  //         } catch (error) {
+  //             console.error('Error fetching tasks:', error);
+  //         }
+  //     };
+
+  //     fetchTasks();
+  // }, [selectedDate]);
+
+        // Handle checkbox change to update task status
      
-    useEffect(() => {
-      const fetchTasks = async () => {
+
+        const fetchTasks = async () => {
           if (!selectedDate) return; 
-          const timestamp = Math.floor(selectedDate.getTime() / 1000);
+          // const timestamp = Math.floor(selectedDate.getTime() / 1000);
+          const timestamp = Math.floor((selectedDate.getTime() + (5.5 * 60 * 60 * 1000)) / 1000);
+          
 
-           // Log the timestamp
-          //  console.log("Fetching tasks for timestamp:", timestamp);
-
-
+            // Log the selected date and its timestamp
+        console.log("Selected Date:", selectedDate.toLocaleDateString());
+        console.log("Selected Date Timestamp:", timestamp);
+    
+    
           try {
               const response = await fetch(`${process.env.REACT_APP_API_URL}/date/${timestamp}`);
               const data = await response.json();
               
+               // Log the API response
+              console.log('API Response:', data);
+    
               if (response.ok) {
                   setTasks(data.data); 
               } else {
@@ -51,12 +65,12 @@ const Tasks = ({ onUpdateCounts, selectedDate }) => {
               console.error('Error fetching tasks:', error);
           }
       };
-
-      fetchTasks();
-  }, [selectedDate]);
-
-        // Handle checkbox change to update task status
-     const handleCheckboxChange = async (taskId, currentStatus) => {
+  
+      useEffect(() => {
+          fetchTasks();
+      }, [selectedDate]);
+     
+      const handleCheckboxChange = async (taskId, currentStatus, taskDate) => {
           const newStatus = currentStatus === 'pending' ? 'completed' : 'pending';
           
           try {
@@ -65,24 +79,50 @@ const Tasks = ({ onUpdateCounts, selectedDate }) => {
                   headers: {
                       'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ status: newStatus })
+                  body: JSON.stringify({ 
+                    status: newStatus,
+                    date: taskDate 
+                })
               });
               
               if (response.ok) {
                 setTasks((prevTasks) => {
-                  const updatedTasks = prevTasks.map((task) =>
-                    task._id === taskId ? { ...task, status: newStatus } : task
+                  return prevTasks.map((task) => 
+                      task._id === taskId ? { ...task, status: newStatus } : task
                   );
+              });
+                 
+                //    // Log the updated tasks
+                // console.log('Updated Tasks:', updatedTasks);
+
+                //   // Update counts based on the updated tasks
+                //   const completedCount = updatedTasks.filter(task => task.status === 'completed').length;
+                //   const pendingCount = updatedTasks.length - completedCount;
         
-                  // Update counts based on the updated tasks
-                  const completedCount = updatedTasks.filter(task => task.status === 'completed').length;
-                  const pendingCount = updatedTasks.length - completedCount;
+                //   // Call the function passed from Home to update counts
+                //   onUpdateCounts(completedCount, pendingCount);
+
+
         
-                  // Call the function passed from Home to update counts
-                  onUpdateCounts(completedCount, pendingCount);
-        
-                  return updatedTasks;
-                });
+                //   return updatedTasks;
+                // });
+                console.log("Fetching task counts for the week:");
+
+                console.log("Week Start (date and time):", weekStart.toLocaleString());
+                console.log("Week End (date and time):", weekEnd.toLocaleString());
+
+
+                console.log("Week Start (epoch):", Math.floor(weekStart.getTime() / 1000));
+                console.log("Week End (epoch):", Math.floor(weekEnd.getTime() / 1000));
+
+                fetchTaskCounts(weekStart, weekEnd);
+
+
+                // Fetch updated task counts using weekStart and weekEnd
+                // await fetchTasks();
+               
+                
+                
               } else {
                   console.error('Error updating task status');
               }
@@ -119,7 +159,7 @@ const Tasks = ({ onUpdateCounts, selectedDate }) => {
                                         type="checkbox"
                                         id={`task-${task._id}`}
                                         checked={task.status === 'completed'}
-                                        onChange={() => handleCheckboxChange(task._id, task.status)}                 
+                                        onChange={() => handleCheckboxChange(task._id, task.status, task.date)}                 
                                     />
                                     <label htmlFor={`task-${task._id}`} className="task-title">{task.title}</label>
                                 </div>
@@ -134,7 +174,7 @@ const Tasks = ({ onUpdateCounts, selectedDate }) => {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} fetchTasks={fetchTasks}/>
     </>
   );
 };
