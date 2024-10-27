@@ -96,25 +96,80 @@ const deleteTask = async (req, res) => {
     }
   };
 
+// const getCompletedCount = async (req, res) => {
+//     try {
+//       const completedCount = await tasksdata.countDocuments({ status: "completed" });   
+//       res.status(200).json({ message: "Completed task count retrieved successfully", completed_count: completedCount });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: "Failed to retrieve completed task count: " + error.message });
+//     }
+//   };
+
+// const getPendingCount = async (req, res) => {
+//     try {
+//       const pendingCount = await tasksdata.countDocuments({ status: "pending" });   
+//       res.status(200).json({ message: "Pending task count retrieved successfully", pending_count: pendingCount });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: "Failed to retrieve pending task count: " + error.message });
+//     }
+//   };
+
+
 const getCompletedCount = async (req, res) => {
-    try {
-      const completedCount = await tasksdata.countDocuments({ status: "completed" });   
+  try {
+      const { start, end } = req.query;
+
+      if (!start || !end) {
+          return res.status(400).json({ error: "Start and end dates are required" });
+      }
+
+      const startOfWeek = new Date(start * 1000);
+      const endOfWeek = new Date(end * 1000);
+
+      const completedCount = await tasksdata.countDocuments({
+          status: "completed",
+          date: { 
+              $gte: Math.floor(startOfWeek.getTime() / 1000), 
+              $lt: Math.floor(endOfWeek.getTime() / 1000) 
+          }
+      });
+
       res.status(200).json({ message: "Completed task count retrieved successfully", completed_count: completedCount });
-    } catch (error) {
+  } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to retrieve completed task count: " + error.message });
-    }
-  };
+  }
+};
 
 const getPendingCount = async (req, res) => {
-    try {
-      const pendingCount = await tasksdata.countDocuments({ status: "pending" });   
+  try {
+      const { start, end } = req.query;
+
+      if (!start || !end) {
+          return res.status(400).json({ error: "Start and end dates are required" });
+      }
+
+      const startOfWeek = new Date(start * 1000);
+      const endOfWeek = new Date(end * 1000);
+
+      const pendingCount = await tasksdata.countDocuments({
+          status: "pending",
+          date: { 
+              $gte: Math.floor(startOfWeek.getTime() / 1000), 
+              $lt: Math.floor(endOfWeek.getTime() / 1000) 
+          }
+      });
+
       res.status(200).json({ message: "Pending task count retrieved successfully", pending_count: pendingCount });
-    } catch (error) {
+  } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to retrieve pending task count: " + error.message });
-    }
-  };
+  }
+};
+
+
 
 const getTasksByDate = async (req, res) => {
     try {

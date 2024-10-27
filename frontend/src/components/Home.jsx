@@ -49,13 +49,23 @@ const Home = () => {
 
 
    // Function to fetch initial task counts
-   const fetchTaskCounts = async () => {
+   const fetchTaskCounts = async (startOfWeek, endOfWeek) => {
     try {
-      const completedResponse = await fetch(`${process.env.REACT_APP_API_URL}/completed-count`);
+      const startTimestamp = Math.floor(startOfWeek.getTime() / 1000);
+      const endTimestamp = Math.floor(endOfWeek.getTime() / 1000);
+
+      console.log("Start of the week (timestamp):", startTimestamp);
+      console.log("End of the week (timestamp):", endTimestamp);
+
+      const completedResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/completed-count?start=${startTimestamp}&end=${endTimestamp}`
+      );
       const completedData = await completedResponse.json();
       setCompletedTasks(completedData.completed_count);
 
-      const pendingResponse = await fetch(`${process.env.REACT_APP_API_URL}/pending-count`);
+      const pendingResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/pending-count?start=${startTimestamp}&end=${endTimestamp}`
+      );
       const pendingData = await pendingResponse.json();
       setPendingTasks(pendingData.pending_count);
     } catch (error) {
@@ -64,8 +74,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchTaskCounts(); 
-  }, []);
+    const weekDays = getCurrentWeek(currentWeek);
+    const startOfWeek = weekDays[0];
+    const endOfWeek = weekDays[6];
+    fetchTaskCounts(startOfWeek, endOfWeek);
+  }, [currentWeek]);
 
   
   const handleUpdateTaskCounts = (completedCount, pendingCount) => {
