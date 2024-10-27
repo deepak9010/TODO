@@ -22,7 +22,7 @@ const Read = ({ isOpen, onClose, taskId, fetchTasks }) => {
         const fetchTaskDetails = async () => {
             if (taskId) {
                 try {
-                    const response = await fetch(`${process.env.REACT_APP_API_URL}/edit/${taskId}`);
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}/task/${taskId}`);
                     const data = await response.json();
 
                     if (response.ok) {
