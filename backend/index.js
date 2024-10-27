@@ -5,13 +5,18 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
-app.use(cors({
+const corsConfig={
   origin : "*",
-  methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"],
   credentials: true,
-}));
-
+}
+// app.use(cors({
+//   origin : "*",
+//   methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
+//   credentials: true,
+// }));
+app.options("", cors(corsConfig));
+app.use(cors(corsConfig));
 app.use(express.json());
 
 
@@ -36,7 +41,7 @@ mongoose.connect(process.env.URI)
     console.log("Failed to connect", error)
   });
 
-  
+
 app.use(pingRoute);
 app.use(taskRoute);
 
