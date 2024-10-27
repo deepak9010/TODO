@@ -148,11 +148,11 @@ const handleCloseReadModal = () => {
                                     <label htmlFor={`task-${task._id}`} className="task-title">{task.title}</label>
                                 </div>
                                 <div className="task-icons">
-                                    <FaEye className="icon view-icon" title="View Details"
-                                      onClick={() => handleReadClick(task._id)}
-                                       />
+                                    {/* <FaEye className="icon view-icon" title="View Details"
+                                      
+                                       /> */}
                                     <FaEdit className="icon edit-icon" title="Edit Details" 
-                                   
+                                    onClick={() => handleReadClick(task._id)}
                                      />
                                     <FaTrash className="icon delete-icon" title="Delete" />
                                 </div>
@@ -163,7 +163,7 @@ const handleCloseReadModal = () => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} fetchTasks={fetchTasks}/>
-      <Read isOpen={isReadOpen} onClose={handleCloseReadModal} taskId={editableId}/>
+      <Read isOpen={isReadOpen} onClose={handleCloseReadModal} taskId={editableId} fetchTasks={fetchTasks}/>
     </>
   );
 };
