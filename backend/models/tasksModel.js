@@ -22,16 +22,16 @@ const tasksDataSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["completed", "pending"], 
+      enum: ["completed", "pending"],
       default: "pending",
     },
     priority: {
       type: String,
-      enum: ["low", "medium", "high"], 
-      default: "medium", 
+      enum: ["low", "medium", "high"],
+      default: "medium",
     },
   },
-  { collection: "tasksdata" } 
+  { collection: "tasksdata" }
 );
 
 const tasksdata = mongoose.model("tasksdata", tasksDataSchema);

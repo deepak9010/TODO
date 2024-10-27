@@ -1,11 +1,10 @@
-// model import here
 const pingdata = require("../models/pingModel");
 
 
 const ping = async (req, res) => {
-    try {
-    // Simple database query to check connection
-    const pong = await pingdata.findOne(); // Fetching a single document just to test DB connectivity
+  try {
+
+    const pong = await pingdata.findOne();
     if (pong) {
       res.status(200).json({ message: "pong", data: pong });
     } else {
