@@ -5,12 +5,14 @@ import '../styles/task.css';
 import Modal from "./Modal";
 import Read from "./Read"
 
-const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd  }) => {
+const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd, searchTerm,onReadTask  }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [isReadOpen, setReadOpen] = useState(false);
     const [tasks, setTasks] = useState([]); 
     const [editableId, setEditableId] = useState(null);
   
+
+    console.log("searchterm",searchTerm);
 
         const fetchTasks = async () => {
           if (!selectedDate) return; 
@@ -146,6 +148,18 @@ const handleCloseReadModal = () => {
   setReadOpen(false);
   setEditableId(null); 
 };
+useEffect(() => {
+  if (onReadTask) {
+    onReadTask(handleReadClick);
+  }
+}, [onReadTask]);
+
+
+//   // Filter tasks based on the searchTerm prop
+//   const filteredTasks = tasks.filter(task => 
+//     task.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+//     task.description.toLowerCase().includes(searchTerm.toLowerCase())
+// );
 
   return (
     <>

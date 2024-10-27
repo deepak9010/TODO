@@ -13,6 +13,9 @@ const Home = () => {
   const [pendingTasks, setPendingTasks] = useState(0);
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [alltasks, setALLTasks] = useState([]); 
+  const [readTaskHandler, setReadTaskHandler] = useState(null); 
   
   const today = new Date();
  console.log("todayyyyy", today)
@@ -58,6 +61,26 @@ const Home = () => {
       setCurrentWeek(nextWeek);
     };
 
+  // Fetch all tasks from API
+  const fetchAllTasks = async () => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setALLTasks(data.data); 
+          console.log("Fetched All Tasks:", data.data);
+        } else {
+            console.error('Error fetching all tasks:', data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching all tasks:', error);
+    }
+};
+
+useEffect(() => {
+    fetchAllTasks(); // Fetch all tasks on component mount
+}, []);
 
    // Function to fetch initial task counts
    const fetchTaskCounts = async (startOfWeek, endOfWeek) => {
@@ -107,22 +130,40 @@ const Home = () => {
   
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);  
+  };
+ 
+  const filteredTasks = alltasks.filter(task => 
+    task.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  
+  const handleSearchItemClick = (taskId) => {
+    if (readTaskHandler) {
+      readTaskHandler(taskId); 
+    }
+  };
 
+  const handleReadTaskRef = (readFunction) => {
+    setReadTaskHandler(() => readFunction); 
+  };
 
   return (
     <>
       <div className="task-section">
         <div className="container mt-4">
           <div className="row align-items-center">
-            <div className="col-sm-6">
+            {/* <div className="col-sm-6">
               <h3>Manage your task here</h3>
-            </div>
-            <div className="col-sm-6 text-right">
+            </div> */}
+            <div className="text-right">
               <div className="input-group  position-relative"> 
                 <input 
                   type="text" 
                   className="form-control search-input" 
-                  placeholder="Search..." 
+                  placeholder="search your task here..."
+                  value={searchTerm}  
+                  onChange={handleSearchChange}  
                   aria-label="Search" 
                 />
                 <div className="input-group-append  position-absolute">
@@ -133,7 +174,27 @@ const Home = () => {
               </div>
             </div>
           </div>
+
+
+          {searchTerm && (
+            <div className="search-results mt-3">
+              {filteredTasks.length > 0 ? (
+                filteredTasks.map(task => (
+                  <div key={task._id} className="task-item p-2 border-bottom"
+                  onClick={() => handleSearchItemClick(task._id)}
+                  >
+                    <h5>{task.title}</h5>
+                  </div>
+                ))
+              ) : (
+                <p>No tasks found for "{searchTerm}"</p>
+              )}
+            </div>
+          )}
+
         </div>
+      
+ 
 
        
         <div className="current-week mt-4">
@@ -168,6 +229,8 @@ const Home = () => {
        fetchTaskCounts={fetchTaskCounts}
        weekStart={startOfWeek}
        weekEnd={endOfWeek}
+       onReadTask={handleReadTaskRef}
+      //  searchTerm={searchTerm} 
        />
       
       </div>
