@@ -12,7 +12,7 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
     const [editableId, setEditableId] = useState(null);
   
 
-    console.log("searchterm",searchTerm);
+    // console.log("searchterm",searchTerm);
 
         const fetchTasks = async () => {
           if (!selectedDate) return; 
@@ -21,8 +21,8 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
           
 
             // Log the selected date and its timestamp
-        console.log("Selected Date:", selectedDate.toLocaleDateString());
-        console.log("Selected Date Timestamp:", timestamp);
+        // console.log("Selected Date:", selectedDate.toLocaleDateString());
+        // console.log("Selected Date Timestamp:", timestamp);
     
     
           try {
@@ -30,7 +30,7 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
               const data = await response.json();
               
                // Log the API response
-              console.log('API Response:', data);
+              // console.log('API Response:', data);
     
               if (response.ok) {
                   setTasks(data.data); 
@@ -82,14 +82,14 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
         
                 //   return updatedTasks;
                 // });
-                console.log("Fetching task counts for the week:");
+                // console.log("Fetching task counts for the week:");
 
-                console.log("Week Start (date and time):", weekStart.toLocaleString());
-                console.log("Week End (date and time):", weekEnd.toLocaleString());
+                // console.log("Week Start (date and time):", weekStart.toLocaleString());
+                // console.log("Week End (date and time):", weekEnd.toLocaleString());
 
 
-                console.log("Week Start (epoch):", Math.floor(weekStart.getTime() / 1000));
-                console.log("Week End (epoch):", Math.floor(weekEnd.getTime() / 1000));
+                // console.log("Week Start (epoch):", Math.floor(weekStart.getTime() / 1000));
+                // console.log("Week End (epoch):", Math.floor(weekEnd.getTime() / 1000));
 
                 fetchTaskCounts(weekStart, weekEnd);
 
@@ -119,7 +119,7 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
                 if (response.ok) {
                     setTasks((prevTasks) => prevTasks.filter(task => task._id !== taskId));
                     fetchTaskCounts(weekStart, weekEnd);
-                    console.log('Task deleted successfully');
+                    // console.log('Task deleted successfully');
                 } else {
                     console.error('Error deleting task:', await response.json());
                 }

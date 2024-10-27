@@ -18,7 +18,7 @@ const Home = () => {
   const [readTaskHandler, setReadTaskHandler] = useState(null);
 
   const today = new Date();
-  console.log("todayyyyy", today)
+  // console.log("todayyyyy", today)
 
   const getCurrentWeek = (date) => {
     const currentDay = date.getDay();
@@ -69,7 +69,7 @@ const Home = () => {
 
       if (response.ok) {
         setALLTasks(data.data);
-        console.log("Fetched All Tasks:", data.data);
+        // console.log("Fetched All Tasks:", data.data);
       } else {
         console.error('Error fetching all tasks:', data.message);
       }
@@ -88,8 +88,8 @@ const Home = () => {
       const startTimestamp = Math.floor(startOfWeek.getTime() / 1000);
       const endTimestamp = Math.floor(endOfWeek.getTime() / 1000);
 
-      console.log("Start of the week (timestamp):", startTimestamp);
-      console.log("End of the week (timestamp):", endTimestamp);
+      // console.log("Start of the week (timestamp):", startTimestamp);
+      // console.log("End of the week (timestamp):", endTimestamp);
 
       const completedResponse = await fetch(
         `${process.env.REACT_APP_API_URL}/completed-count?start=${startTimestamp}&end=${endTimestamp}`
@@ -120,7 +120,7 @@ const Home = () => {
 
   const handleDateClick = (date) => {
     // Log the clicked date as a Date object
-    console.log("Clicked Date Object:", date);
+    // console.log("Clicked Date Object:", date);
 
     // Set the selected date as the date object (not a string)
     setSelectedDate(date);
