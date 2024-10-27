@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; 
-import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'; // Import icons for edit and delete
+import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'; 
 import '../styles/task.css';
 
 import Modal from "./Modal";

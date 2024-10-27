@@ -1,5 +1,3 @@
-// src/components/Modal.js
-
 import React, { useState } from 'react';
 import '../styles/modal.css';
 
@@ -28,7 +26,7 @@ const Modal = ({ isOpen, onClose,fetchTasks }) => {
        // Log the task data
       //  console.log('Task Data:', taskData);
 
-    const apiUrl = `${process.env.REACT_APP_API_URL}/create`; // Adjust the variable name as per your .env file
+    const apiUrl = `${process.env.REACT_APP_API_URL}/create`; 
 
     try {
       const response = await fetch(apiUrl, {

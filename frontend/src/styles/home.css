@@ -91,3 +91,69 @@
     border-bottom: none;
   }
   
+
+  .week-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .week-list {
+    display: flex;
+    gap: 15px;
+    justify-content: space-around;
+    width: 100%;
+  }
+  
+  .arrow-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px; /* Adds spacing between the week list and arrows */
+  }
+  
+  /* Mobile-specific styles */
+  @media (max-width: 600px) {
+    .week-navigation {
+      flex-direction: column;
+    }
+  
+    .week-list {
+      gap: 4px; 
+      padding: 0 5px;
+    }
+    .current-week ul {
+      gap: 6px;
+    }
+  
+    .current-week li {
+      padding: 3px 5px;
+      font-size: 0.8rem; 
+    }
+  
+    .day {
+      font-size: 0.7rem; 
+    }
+  
+    .date {
+      font-size: 0.7rem; 
+    }
+  
+    .arrow-buttons {
+      flex-direction: row;
+      justify-content: center;
+      margin-top: 8px;
+    }
+  
+    .arrow-button {
+      padding: 0 5px; 
+    }
+  }
+  
+
+  @media (max-width: 400px) {
+ 
+    .current-week ul {
+      gap: 3px;
+    }
+
+  }

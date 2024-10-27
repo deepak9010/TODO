@@ -79,15 +79,15 @@ const Read = ({ isOpen, onClose, taskId, fetchTasks }) => {
                             type="text" 
                             placeholder="Task Title" 
                             value={task.title} 
-                            readOnly={!isEditMode} // Make it editable only in edit mode
-                            onChange={(e) => setTask({ ...task, title: e.target.value })} // Update title
+                            readOnly={!isEditMode} 
+                            onChange={(e) => setTask({ ...task, title: e.target.value })}
                         />
                         <textarea 
                             placeholder="Description" 
                             value={task.description} 
                             rows="2" 
-                            readOnly={!isEditMode} // Make it editable only in edit mode
-                            onChange={(e) => setTask({ ...task, description: e.target.value })} // Update description
+                            readOnly={!isEditMode}
+                            onChange={(e) => setTask({ ...task, description: e.target.value })} 
                         />
                         <div className="status-priority-container">
                             <div className="status-container">
@@ -95,7 +95,7 @@ const Read = ({ isOpen, onClose, taskId, fetchTasks }) => {
                                 <select 
                                     id="status" 
                                     value={task.status} 
-                                    onChange={(e) => setTask({ ...task, status: e.target.value })} // Update status
+                                    onChange={(e) => setTask({ ...task, status: e.target.value })} 
                                     disabled={!isEditMode}
                                 >
                                     <option value="pending">Pending</option>
@@ -107,7 +107,7 @@ const Read = ({ isOpen, onClose, taskId, fetchTasks }) => {
                                 <select 
                                     id="priority" 
                                     value={task.priority} 
-                                    onChange={(e) => setTask({ ...task, priority: e.target.value })} // Update priority
+                                    onChange={(e) => setTask({ ...task, priority: e.target.value })} 
                                     disabled={!isEditMode}
                                 >
                                     <option value="low">Low</option>
@@ -124,7 +124,7 @@ const Read = ({ isOpen, onClose, taskId, fetchTasks }) => {
                                     id="start-time" 
                                     value={convertTo24HourFormat(task.startTime)} 
                                     readOnly={!isEditMode}
-                                    onChange={(e) => setTask({ ...task, startTime: e.target.value })} // Update start time
+                                    onChange={(e) => setTask({ ...task, startTime: e.target.value })} 
                                 />
                             </div>
                             <div className="end-time-container">

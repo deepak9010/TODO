@@ -12,11 +12,6 @@ const Navbar = ({menuOpen, setMenuOpen}) => {
         <nav>
            <NavContent setMenuOpen={setMenuOpen}/>
         </nav>
-
-         {/* <button className="navBtn" onClick={() => setMenuOpen( !menuOpen)}>
-            <AiOutlineMenu />
-         </button>
-       */}
      </>
  
   );
