@@ -5,18 +5,13 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const corsConfig={
+
+app.use(cors({
   origin : "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"],
+  methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
   credentials: true,
-}
-// app.use(cors({
-//   origin : "*",
-//   methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
-//   credentials: true,
-// }));
-app.options("", cors(corsConfig));
-app.use(cors(corsConfig));
+}));
+
 app.use(express.json());
 
 
