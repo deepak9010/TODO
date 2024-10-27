@@ -168,7 +168,11 @@ const handleCloseReadModal = () => {
                                         checked={task.status === 'completed'}
                                         onChange={() => handleCheckboxChange(task._id, task.status, task.date)}                 
                                     />
-                                    <label htmlFor={`task-${task._id}`} className="task-title">{task.title}</label>
+                                    <label htmlFor={`task-${task._id}`} 
+                                       className={`task-title ${task.status === 'completed' ? 'task-completed' : ''}`}
+                                    >
+                                      {task.title}
+                                      </label>
                                 </div>
                                 <div className="task-icons">
                                     {/* <FaEye className="icon view-icon" title="View Details"

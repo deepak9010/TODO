@@ -26,9 +26,7 @@ const Navbar = ({menuOpen, setMenuOpen}) => {
 const NavContent = ({setMenuOpen})=>(
   <>
      <h2> TODO</h2>
-     <div>
-      <Link to="/create"  onClick={() => setMenuOpen(false)}>Create Task</Link>
-     </div> 
+
   </>
 )
 
