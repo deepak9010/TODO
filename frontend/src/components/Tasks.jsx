@@ -3,40 +3,14 @@ import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'; // Import icons for edi
 import '../styles/task.css';
 
 import Modal from "./Modal";
+import Read from "./Read"
 
 const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd  }) => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isReadOpen, setReadOpen] = useState(false);
     const [tasks, setTasks] = useState([]); 
+    const [editableId, setEditableId] = useState(null);
   
-  
-  //   useEffect(() => {
-  //     const fetchTasks = async () => {
-  //         if (!selectedDate) return; 
-  //         const timestamp = Math.floor(selectedDate.getTime() / 1000);
-
-  //          // Log the timestamp
-  //         //  console.log("Fetching tasks for timestamp:", timestamp);
-
-
-  //         try {
-  //             const response = await fetch(`${process.env.REACT_APP_API_URL}/date/${timestamp}`);
-  //             const data = await response.json();
-              
-  //             if (response.ok) {
-  //                 setTasks(data.data); 
-  //             } else {
-  //                 console.error('Error fetching tasks:', data.message);
-  //             }
-  //         } catch (error) {
-  //             console.error('Error fetching tasks:', error);
-  //         }
-  //     };
-
-  //     fetchTasks();
-  // }, [selectedDate]);
-
-        // Handle checkbox change to update task status
-     
 
         const fetchTasks = async () => {
           if (!selectedDate) return; 
@@ -140,6 +114,16 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
     setModalOpen(false); 
   };
 
+  const handleReadClick = (taskId) => {
+    setEditableId(taskId); 
+    setReadOpen(true); 
+};
+
+const handleCloseReadModal = () => {
+  setReadOpen(false);
+  setEditableId(null); 
+};
+
   return (
     <>
       <div className="tasks-container">
@@ -164,8 +148,12 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
                                     <label htmlFor={`task-${task._id}`} className="task-title">{task.title}</label>
                                 </div>
                                 <div className="task-icons">
-                                    <FaEye className="icon view-icon" title="View Details" />
-                                    <FaEdit className="icon edit-icon" title="Edit Details" />
+                                    <FaEye className="icon view-icon" title="View Details"
+                                      onClick={() => handleReadClick(task._id)}
+                                       />
+                                    <FaEdit className="icon edit-icon" title="Edit Details" 
+                                   
+                                     />
                                     <FaTrash className="icon delete-icon" title="Delete" />
                                 </div>
                             </div>
@@ -175,6 +163,7 @@ const Tasks = ({ onUpdateCounts, selectedDate,fetchTaskCounts,weekStart, weekEnd
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} fetchTasks={fetchTasks}/>
+      <Read isOpen={isReadOpen} onClose={handleCloseReadModal} taskId={editableId}/>
     </>
   );
 };

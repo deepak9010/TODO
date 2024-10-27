@@ -115,7 +115,7 @@ const Home = () => {
         <div className="container mt-4">
           <div className="row align-items-center">
             <div className="col-sm-6">
-              <h3>Your Heading Here</h3>
+              <h3>Manage your task here</h3>
             </div>
             <div className="col-sm-6 text-right">
               <div className="input-group  position-relative"> 

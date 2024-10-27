@@ -7,10 +7,7 @@ import{  BrowserRouter as Router,Routes,Route} from "react-router-dom";
 import {Navigate ,useLocation,withRouter} from "react-router-dom";
 
 import Navbar,{NavbarPhone} from './components/Navbar';
-import Create from './components/Create';
 import Home from './components/Home';
-
-import Read from './components/Read';
 
 
 
@@ -32,7 +29,7 @@ function App() {
           <Routes>
             {/* /create */}
             <Route path="/" element={<Home />}  />
-             <Route path="/create" element={<Create />} />
+
     
           </Routes>
 

@@ -1,103 +1,132 @@
-// in React2.jsx , i add some mui functionality like dialog box
+// src/components/Read.js
 
-// import React,{useEffect,useState} from "react";
-// import { Link } from 'react-router-dom';
-
-
-
-// const Read = () => {
- 
-//   const [data, setData] = useState();
-//   const [error, setError] = useState();
+import React, { useEffect, useState } from 'react';
+import '../styles/read.css';
 
 
+const convertTo24HourFormat = (time) => {
+    const [timePart, modifier] = time.split(' ');
+    let [hours, minutes] = timePart.split(':');
 
-//   // for delete the card
-//   const handleDelete = async(id)=> {
-//     const response = await fetch(`http://localhost:5000/${id}`, {
-//       method: "DELETE",
-//     });
+    if (modifier === 'PM' && hours !== '12') {
+        hours = parseInt(hours, 10) + 12;
+    } else if (modifier === 'AM' && hours === '12') {
+        hours = '00';
+    }
 
-//     const result2 = await response.json();
+    return `${hours}:${minutes}`;
+};
 
-//     if (!response.ok) {
-//       setError(result2.error);
-//     }
-//     if (response.ok) {
-//       // console.log("deleted", response.ok);
-//       setError("Deleted Successfully");
+const Read = ({ isOpen, onClose, taskId }) => {
+  const [task, setTask] = useState(null);
 
-//       setTimeout(() => {
-//         setError("");
-//         getData();
-//       }, 1000);
-//     }
-    
-//   }
+  console.log("taskiddddd",taskId);
 
-//   // for read all data
-//   const getData = async()=> {
-//     const response = await fetch("http://localhost:5000");
-//     const result = await response.json();
+  useEffect(() => {
+    const fetchTaskDetails = async () => {
+      if (taskId) {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/task/${taskId}`);
+          const data = await response.json();
 
-//     // console.log("result..", result);
+          if (response.ok) {
+            setTask(data.data); 
+          } else {
+            console.error('Error fetching task details:', data.message);
+          }
+        } catch (error) {
+          console.error('Error fetching task details:', error);
+        }
+      }
+    };
 
-//     if (!response.ok) {
-//       console.log(result.error);
-//       setError(result.error);
-//     }
-//     if (response.ok) {
-//       // console.log(result);
-//       setData(result);
-//       setError("");
-     
-//     }
+    fetchTaskDetails();
+  }, [taskId]);
 
-//   }
- 
+  if (!isOpen) return null;
 
-//   useEffect(() => {
-//     getData();
-//   },[]);
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>Task Details</h2>
+        {task ? (
+          <form>
+            <input 
+              type="text" 
+              placeholder="Task Title" 
+              value={task.title} 
+              readOnly 
+            />
+            <textarea 
+              placeholder="Description" 
+              value={task.description} 
+              rows="2" 
+              readOnly 
+            />
+            <div className="status-priority-container">
+              <div className="status-container">
+                <label htmlFor="status">Status:</label>
+                <select 
+                  id="status" 
+                  value={task.status} 
+                  disabled
+                >
+                  <option value="pending">Pending</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              <div className="priority-container">
+                <label htmlFor="priority">Priority:</label>
+                <select 
+                  id="priority" 
+                  value={task.priority} 
+                  disabled
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+            </div>
+            <div className="time-container">
+              <div className="start-time-container">
+                <label htmlFor="start-time">Start Time:</label>
+                <input 
+                  type="time" 
+                  id="start-time" 
+                  value={convertTo24HourFormat(task.startTime)} 
+                  readOnly 
+                />
+              </div>
+              <div className="end-time-container">
+                <label htmlFor="end-time">End Time:</label>
+                <input 
+                  type="time" 
+                  id="end-time" 
+                  value={convertTo24HourFormat(task.endTime)} 
+                  readOnly 
+                />
+              </div>
+            </div>
+            <label htmlFor="date">Date:</label>
+            <input 
+              type="date" 
+              id="date" 
+              value={new Date(task.date * 1000).toISOString().split('T')[0]} 
+              readOnly 
+            />
+            <div className="button-container">
+              <button className="close-button" onClick={onClose}>
+                Close
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p>Loading task details...</p>
+        )}
+      </div>
+    </div>
+  );
+};
 
-//   console.log(data);
-
-//   return (
-//     <div id="containerAlldata">
-//        {error && <div className="alert alert-danger"> {error} </div>}
-
-//        <h2 className='text-center'>All data</h2>
-
-//       <div className="Alldetail_container">
-
-//         {data?.map((ele) => (
-//                  <div key={ele._id} className="detail_item">
-
-//                 <div className="card-content">
-//                   <h4 > {ele.name} </h4>
-//                   <h5 > {ele.email} </h5>
-//                   <h5 > {ele.branch}  </h5>
-//                   <p>  {ele.age}</p>
-                
-//                  <div className="projects_button">
-//                  <a href="#all" className="card_link" onClick={() => handleDelete(ele._id)}>
-//                     Delete
-//                   </a>
-
-//                   <Link to={`/${ele._id}`} className="card_link">
-//                     Edit
-//                   </Link>
-//                  </div>
-
-//                 </div>
-    
-//             </div>
-
-//         ))}
-       
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Read;
+export default Read;
