@@ -4,31 +4,56 @@ import '../styles/task.css';
 
 import Modal from "./Modal";
 
-const Tasks = ({ onUpdateCounts }) => {
+const Tasks = ({ onUpdateCounts, selectedDate }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [tasks, setTasks] = useState([]); 
   
-      // Fetch tasks from the API
-      useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
-                const data = await response.json();
+    //   // Fetch tasks from the API
+    //   useEffect(() => {
+    //     const fetchTasks = async () => {
+    //         try {
+    //             const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks`);
+    //             const data = await response.json();
                 
-                if (response.ok) {
-                    // console.log('Tasks:', data.data);
-                    setTasks(data.data); 
-                } else {
-                    console.error('Error fetching tasks:', data.message);
-                }
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
-            }
-        };
+    //             if (response.ok) {
+    //                 // console.log('Tasks:', data.data);
+    //                 setTasks(data.data); 
+    //             } else {
+    //                 console.error('Error fetching tasks:', data.message);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching tasks:', error);
+    //         }
+    //     };
 
-        fetchTasks();
-    }, []);
-  
+    //     fetchTasks();
+    // }, []);
+     
+    useEffect(() => {
+      const fetchTasks = async () => {
+          if (!selectedDate) return; 
+          const timestamp = Math.floor(selectedDate.getTime() / 1000);
+
+           // Log the timestamp
+          //  console.log("Fetching tasks for timestamp:", timestamp);
+
+
+          try {
+              const response = await fetch(`${process.env.REACT_APP_API_URL}/date/${timestamp}`);
+              const data = await response.json();
+              
+              if (response.ok) {
+                  setTasks(data.data); 
+              } else {
+                  console.error('Error fetching tasks:', data.message);
+              }
+          } catch (error) {
+              console.error('Error fetching tasks:', error);
+          }
+      };
+
+      fetchTasks();
+  }, [selectedDate]);
 
         // Handle checkbox change to update task status
      const handleCheckboxChange = async (taskId, currentStatus) => {
@@ -84,24 +109,28 @@ const Tasks = ({ onUpdateCounts }) => {
         </div>
 
         <div className="tasks-list">
-          {tasks.map((task) => (
-            <div className="task-item d-flex align-items-center" key={task._id}>
-              <div className="checkbox-label-container d-flex align-items-center">
-                <input 
-                type="checkbox"
-                 id={`task-${task._id}`}
-                 checked={task.status === 'completed'}
-                 onChange={() => handleCheckboxChange(task._id, task.status)}                 
-                 />
-                <label htmlFor={`task-${task._id}`} className="task-title">{task.title}</label>
-              </div>
-              <div className="task-icons">
-                <FaEye className="icon view-icon" title="View Details" />
-                <FaEdit className="icon edit-icon"title="Edit Details" />
-                <FaTrash className="icon delete-icon" title="Delete" />
-              </div>
-            </div>
-          ))}
+        {tasks.length === 0 ? ( 
+                        <div className="no-tasks-message">No tasks available for this day.</div>
+                    ) : (
+                        tasks.map((task) => (
+                            <div className="task-item d-flex align-items-center" key={task._id}>
+                                <div className="checkbox-label-container d-flex align-items-center">
+                                    <input 
+                                        type="checkbox"
+                                        id={`task-${task._id}`}
+                                        checked={task.status === 'completed'}
+                                        onChange={() => handleCheckboxChange(task._id, task.status)}                 
+                                    />
+                                    <label htmlFor={`task-${task._id}`} className="task-title">{task.title}</label>
+                                </div>
+                                <div className="task-icons">
+                                    <FaEye className="icon view-icon" title="View Details" />
+                                    <FaEdit className="icon edit-icon" title="Edit Details" />
+                                    <FaTrash className="icon delete-icon" title="Delete" />
+                                </div>
+                            </div>
+                        ))
+                    )}
         </div>
       </div>
 

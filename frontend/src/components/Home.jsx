@@ -12,7 +12,9 @@ const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
   const [currentWeek, setCurrentWeek] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   
+  const today = new Date();
 
   const getCurrentWeek = (date) => {
     const currentDay = date.getDay(); 
@@ -54,8 +56,8 @@ const Home = () => {
       const startTimestamp = Math.floor(startOfWeek.getTime() / 1000);
       const endTimestamp = Math.floor(endOfWeek.getTime() / 1000);
 
-      console.log("Start of the week (timestamp):", startTimestamp);
-      console.log("End of the week (timestamp):", endTimestamp);
+      // console.log("Start of the week (timestamp):", startTimestamp);
+      // console.log("End of the week (timestamp):", endTimestamp);
 
       const completedResponse = await fetch(
         `${process.env.REACT_APP_API_URL}/completed-count?start=${startTimestamp}&end=${endTimestamp}`
@@ -84,6 +86,10 @@ const Home = () => {
   const handleUpdateTaskCounts = (completedCount, pendingCount) => {
     setCompletedTasks(completedCount);
     setPendingTasks(pendingCount);
+  };
+
+  const handleDateClick = (date) => {
+    setSelectedDate(date); 
   };
 
   return (
@@ -120,7 +126,13 @@ const Home = () => {
             </button>
             <ul className="d-flex list-unstyled">
               {weekDays.map((date, index) => (
-                <li key={index} className="text-center mx-2">
+                <li key={index} 
+                className={`text-center mx-2 ${
+                  date.toDateString() === today.toDateString() ? "current-day" : ""
+                }`}
+                onClick={() => handleDateClick(date)}
+                
+                >
                   <div className="day">{date.toLocaleDateString("en-US", { weekday: "short" })}</div>
                   <div className="date">{date.getDate()}</div>
                 </li>
@@ -133,7 +145,7 @@ const Home = () => {
         </div>
 
        <Reminder completedTasks={completedTasks} pendingTasks={pendingTasks}/>
-       <Tasks onUpdateCounts={handleUpdateTaskCounts}/>
+       <Tasks onUpdateCounts={handleUpdateTaskCounts} selectedDate={selectedDate}/>
       
       </div>
     </>

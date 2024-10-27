@@ -62,3 +62,8 @@
 .arrow-button{
     border: none;
 }
+
+.current-day {
+    background-color: #4566EC !important;
+    color: #ffffff;
+  }
